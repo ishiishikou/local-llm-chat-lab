@@ -1,0 +1,2 @@
+# Change this value on a temporary bridge/* branch to trigger AGMSG Runtime Bridge.
+RUN=0
