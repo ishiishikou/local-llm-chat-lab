@@ -1,0 +1,86 @@
+name: AGMSG Runtime Bridge
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+    paths:
+      - .github/agmsg-bridge-trigger
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  bridge:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' &&
+       github.event.pull_request.head.repo.full_name == github.repository &&
+       startsWith(github.head_ref, 'bridge/'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      AGMSG_COMMIT: 948b1003868b9f29567132084346368200c36963
+
+    steps:
+      - name: Clean previous AGMSG artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?per_page=100" \
+            --jq '.artifacts[] | select(.name == "agmsg-container-bridge") | .id' \
+            | while read -r id; do
+                [ -n "$id" ] || continue
+                gh api --method DELETE "repos/${GITHUB_REPOSITORY}/actions/artifacts/${id}" || true
+              done
+
+      - name: Package AGMSG and sqlite3 runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git init agmsg
+          git -C agmsg remote add origin https://github.com/fujibee/agmsg.git
+          git -C agmsg fetch --depth 1 origin "$AGMSG_COMMIT"
+          git -C agmsg checkout --detach FETCH_HEAD
+
+          sudo apt-get update -qq
+          sudo apt-get install -y sqlite3
+
+          tar --exclude='.git' -czf agmsg-source.tar.gz agmsg
+
+          SQLITE_BIN="$(command -v sqlite3)"
+          SQLITE_LIB="$(ldd "$SQLITE_BIN" | awk '/libsqlite3.so.0/ {print $3; exit}')"
+          if [ -z "$SQLITE_LIB" ]; then
+            echo "Could not resolve libsqlite3.so.0" >&2
+            exit 1
+          fi
+
+          cp "$SQLITE_BIN" sqlite3.real
+          cp "$SQLITE_LIB" libsqlite3.so.0
+          chmod +x sqlite3.real
+
+          LD_LIBRARY_PATH="$PWD" ./sqlite3.real --version > SQLITE_VERSION.txt
+          cat agmsg/VERSION > AGMSG_VERSION.txt
+          printf '%s\n' "$AGMSG_COMMIT" > AGMSG_COMMIT.txt
+          ldd "$SQLITE_BIN" > SQLITE_LDD.txt
+          sha256sum agmsg-source.tar.gz sqlite3.real libsqlite3.so.0 > SHA256SUMS.txt
+
+      - name: Upload bridge artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: agmsg-container-bridge
+          path: |
+            agmsg-source.tar.gz
+            sqlite3.real
+            libsqlite3.so.0
+            SQLITE_VERSION.txt
+            AGMSG_VERSION.txt
+            AGMSG_COMMIT.txt
+            SQLITE_LDD.txt
+            SHA256SUMS.txt
+          retention-days: 1
+          compression-level: 0
