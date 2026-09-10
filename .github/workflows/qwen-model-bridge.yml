@@ -48,8 +48,7 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             PART="${{ inputs.part }}"
           else
-            # shellcheck disable=SC1091
-            source .github/bridge-request.env
+            PART="$(awk -F= '$1 == "PART" { print $2 }' .github/bridge-request.env | tail -n 1 | tr -d '[:space:]')"
           fi
 
           if ! [[ "$PART" =~ ^[0-6]$ ]]; then
