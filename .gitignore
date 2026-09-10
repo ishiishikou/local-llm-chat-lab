@@ -1,0 +1,16 @@
+# Large model/runtime artifacts
+*.gguf
+qwen4b.part.*
+qwen4b-part-*.zip
+agmsg-container-bridge*.zip
+llama-*-bin-*.tar.gz
+agmsg-source.tar.gz
+
+# Runtime/output files
+*.out
+*.err
+*.pid
+*.done
+*.launch
+__pycache__/
+.DS_Store
