@@ -1,0 +1,134 @@
+name: Qwen Model Bridge
+
+on:
+  workflow_dispatch:
+    inputs:
+      part:
+        description: "Part number (0-6)"
+        required: true
+        default: "0"
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+    paths:
+      - .github/bridge-request.env
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  bridge:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' &&
+       github.event.pull_request.head.repo.full_name == github.repository &&
+       startsWith(github.head_ref, 'bridge/'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      MODEL_URL: https://huggingface.co/bartowski/Qwen_Qwen3.5-4B-GGUF/resolve/main/Qwen_Qwen3.5-4B-Q4_K_M.gguf?download=true
+      MODEL_SIZE: "3013027808"
+      MODEL_SHA256: 13c16f426047e2de38cd075bdade4a7bcbc8c774384876f677740cda65f8a983
+      CHUNK_SIZE: "440401920"
+      LLAMA_URL: https://github.com/ggml-org/llama.cpp/releases/download/b10809/llama-b10809-bin-ubuntu-x64.tar.gz
+      LLAMA_SHA256: 5e34434ddc6d03cd1584f403201aff0d4bd1a5793a72ff7e286532dfd1e4b941
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve part range
+        id: range
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            PART="${{ inputs.part }}"
+          else
+            # shellcheck disable=SC1091
+            source .github/bridge-request.env
+          fi
+
+          if ! [[ "$PART" =~ ^[0-6]$ ]]; then
+            echo "PART must be an integer from 0 to 6" >&2
+            exit 1
+          fi
+
+          START=$((PART * CHUNK_SIZE))
+          END=$((START + CHUNK_SIZE - 1))
+          LAST=$((MODEL_SIZE - 1))
+          if [ "$END" -gt "$LAST" ]; then
+            END="$LAST"
+          fi
+          EXPECTED=$((END - START + 1))
+
+          echo "part=$PART" >> "$GITHUB_OUTPUT"
+          echo "start=$START" >> "$GITHUB_OUTPUT"
+          echo "end=$END" >> "$GITHUB_OUTPUT"
+          echo "expected=$EXPECTED" >> "$GITHUB_OUTPUT"
+
+          printf 'part=%s\nstart=%s\nend=%s\nexpected_size=%s\nmodel_size=%s\nmodel_sha256=%s\n' \
+            "$PART" "$START" "$END" "$EXPECTED" "$MODEL_SIZE" "$MODEL_SHA256" > RANGE.txt
+
+      - name: Clean previous temporary model artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?per_page=100" \
+            --jq '.artifacts[] | select(.name | startswith("qwen4b-part-")) | .id' \
+            | while read -r id; do
+                [ -n "$id" ] || continue
+                gh api --method DELETE "repos/${GITHUB_REPOSITORY}/actions/artifacts/${id}" || true
+              done
+
+      - name: Download model range
+        shell: bash
+        run: |
+          set -euo pipefail
+          PART="${{ steps.range.outputs.part }}"
+          START="${{ steps.range.outputs.start }}"
+          END="${{ steps.range.outputs.end }}"
+          EXPECTED="${{ steps.range.outputs.expected }}"
+
+          curl -L --fail --retry 3 --retry-all-errors \
+            --range "${START}-${END}" \
+            -D headers.txt \
+            -o "qwen4b.part.${PART}" \
+            "$MODEL_URL"
+
+          ACTUAL="$(stat -c%s "qwen4b.part.${PART}")"
+          if [ "$ACTUAL" -ne "$EXPECTED" ]; then
+            echo "Unexpected part size: expected=$EXPECTED actual=$ACTUAL" >&2
+            exit 1
+          fi
+
+          printf '%s\n' "$ACTUAL" > PART_SIZE.txt
+          sha256sum "qwen4b.part.${PART}" > PART_SHA256.txt
+
+      - name: Download llama.cpp runtime for part 0
+        if: steps.range.outputs.part == '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-all-errors \
+            -o llama-b10809-bin-ubuntu-x64.tar.gz \
+            "$LLAMA_URL"
+          echo "$LLAMA_SHA256  llama-b10809-bin-ubuntu-x64.tar.gz" | sha256sum -c -
+
+      - name: Upload bridge artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen4b-part-${{ steps.range.outputs.part }}
+          path: |
+            qwen4b.part.*
+            RANGE.txt
+            PART_SIZE.txt
+            PART_SHA256.txt
+            headers.txt
+            llama-b10809-bin-ubuntu-x64.tar.gz
+          if-no-files-found: ignore
+          retention-days: 1
+          compression-level: 0
