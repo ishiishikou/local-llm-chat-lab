@@ -56,6 +56,10 @@ static llama_context * ctx_new(llama_model * model, int threads, int nseq) {
     p.n_batch = 2048;
     p.n_ubatch = 512;
     p.n_seq_max = std::max(1, nseq);
+    // Required by llama.cpp for coupled multi-sequence input on this
+    // Qwen3.5 hybrid recurrent/KV architecture. This is the API equivalent
+    // of the CLI -kvu flag suggested by llama.cpp itself.
+    p.kv_unified = true;
     p.no_perf = false;
     auto * c = llama_init_from_model(model, p);
     if (!c) throw std::runtime_error("context init failed");
