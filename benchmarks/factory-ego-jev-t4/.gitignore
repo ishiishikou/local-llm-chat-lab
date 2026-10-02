@@ -1,0 +1,5 @@
+data/
+upstream/
+*.mp4
+__pycache__/
+.cache/
