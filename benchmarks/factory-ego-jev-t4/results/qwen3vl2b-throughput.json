@@ -1,0 +1,68 @@
+{
+  "model": "Qwen/Qwen3-VL-2B-Instruct",
+  "max_pixels": 50176,
+  "min_pixels": 3136,
+  "frame_count": 800,
+  "results": [
+    {
+      "batch_size": 1,
+      "frames": 800,
+      "wall_fps": 9.40773654286483,
+      "gpu_fps": 11.998606166256524,
+      "batch_e2e_p50_ms": 100.83718600003522,
+      "batch_e2e_p95_ms": 138.0037771500838,
+      "batch_gpu_p50_ms": 78.8732500000151,
+      "batch_gpu_p95_ms": 108.8879381000538,
+      "peak_vram_gb": 4.292969984,
+      "capacity_2fps_raw": 4
+    },
+    {
+      "batch_size": 2,
+      "frames": 800,
+      "wall_fps": 13.879274796440761,
+      "gpu_fps": 19.623586938085744,
+      "batch_e2e_p50_ms": 140.45257899999797,
+      "batch_e2e_p95_ms": 180.5268585999329,
+      "batch_gpu_p50_ms": 101.14268399991033,
+      "batch_gpu_p95_ms": 133.22865564991824,
+      "peak_vram_gb": 4.31974656,
+      "capacity_2fps_raw": 6
+    },
+    {
+      "batch_size": 4,
+      "frames": 800,
+      "wall_fps": 14.831303019097662,
+      "gpu_fps": 21.15824081379464,
+      "batch_e2e_p50_ms": 272.145202499928,
+      "batch_e2e_p95_ms": 338.14790569994085,
+      "batch_gpu_p50_ms": 180.3289209999548,
+      "batch_gpu_p95_ms": 233.4936735499688,
+      "peak_vram_gb": 4.370704896,
+      "capacity_2fps_raw": 7
+    },
+    {
+      "batch_size": 8,
+      "frames": 800,
+      "wall_fps": 14.497366844736895,
+      "gpu_fps": 20.125112471458092,
+      "batch_e2e_p50_ms": 535.1576430000478,
+      "batch_e2e_p95_ms": 684.1632291501809,
+      "batch_gpu_p50_ms": 383.8869490000434,
+      "batch_gpu_p95_ms": 532.219512850156,
+      "peak_vram_gb": 4.474138112,
+      "capacity_2fps_raw": 7
+    },
+    {
+      "batch_size": 16,
+      "frames": 800,
+      "wall_fps": 14.739082792060879,
+      "gpu_fps": 20.36538026203523,
+      "batch_e2e_p50_ms": 1081.6526505000184,
+      "batch_e2e_p95_ms": 1282.1444744999326,
+      "batch_gpu_p50_ms": 760.7746069999166,
+      "batch_gpu_p95_ms": 949.8158725998678,
+      "peak_vram_gb": 4.683799552,
+      "capacity_2fps_raw": 7
+    }
+  ]
+}
