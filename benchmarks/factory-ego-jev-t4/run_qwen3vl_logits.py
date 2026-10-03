@@ -63,6 +63,7 @@ def main():
     ap.add_argument("--fps", type=float, default=2.0)
     ap.add_argument("--threshold", type=float, default=0.50)
     ap.add_argument("--max-pixels", type=int, default=50176)
+    ap.add_argument("--min-pixels", type=int, default=3136)
     ap.add_argument("--unit", action="append", dest="units")
     args = ap.parse_args()
 
@@ -76,8 +77,9 @@ def main():
 
     processor = AutoProcessor.from_pretrained(args.model)
     processor.tokenizer.padding_side = "left"
-    if hasattr(processor, "image_processor") and hasattr(processor.image_processor, "max_pixels"):
-        processor.image_processor.max_pixels = args.max_pixels
+    if hasattr(processor, "image_processor") and hasattr(processor.image_processor, "size"):
+        processor.image_processor.size["longest_edge"] = args.max_pixels
+        processor.image_processor.size["shortest_edge"] = args.min_pixels
     model = AutoModelForImageTextToText.from_pretrained(
         args.model, torch_dtype=torch.float16, attn_implementation="sdpa"
     ).to("cuda").eval()
