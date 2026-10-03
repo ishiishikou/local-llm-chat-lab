@@ -1,0 +1,9 @@
+{
+  "model": "Qwen/Qwen3-VL-2B-Instruct",
+  "batch_size": 4,
+  "frames": 800,
+  "gpu_inference_seconds": 36.38554925299991,
+  "gpu_fps": 21.986750686030714,
+  "mean_batch_ms": 181.92774626499954,
+  "peak_vram_gb": 4.372494848
+}
