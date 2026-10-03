@@ -1,0 +1,14 @@
+{
+  "model": "Qwen/Qwen3-VL-2B-Instruct",
+  "batch_size": 4,
+  "pairs": 2720,
+  "frames": 800,
+  "events": 68,
+  "avg_events_per_frame": 3.4,
+  "pair_wall_fps": 19.21374068671502,
+  "frame_equiv_fps": 5.651100201975006,
+  "capacity_2fps_raw": 2,
+  "batch_e2e_p50_ms": 200.71952850003072,
+  "batch_e2e_p95_ms": 240.74934989984058,
+  "peak_vram_gb": 4.31558912
+}
