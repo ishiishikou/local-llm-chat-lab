@@ -1,0 +1,130 @@
+{
+  "f001_w004_material_replenishment": {
+    "fasten_part_with_driver": 0.7439976334571838,
+    "pour_parts_from_bag": 0.11058536916971207,
+    "roll_empty_bag": 0.012025601230561733,
+    "__other__": 0.13339142501354218
+  },
+  "f001_w011_metal_stamping": {
+    "feed_metal_strip_into_press": 0.3375602662563324,
+    "walk_to_next_press": 0.6306455731391907,
+    "pick_up_metal_sheets": 0.0043161725625395775,
+    "align_metal_sheet_stack": 0.0006218036869540811,
+    "__other__": 0.026856129989027977
+  },
+  "f002_w002_garment_bagging": {
+    "pick_garment_from_stack": 0.7991971373558044,
+    "insert_garment_into_bag": 0.007835052907466888,
+    "seal_bag_flap": 0.0023160374257713556,
+    "place_package_to_right": 0.18982596695423126,
+    "__other__": 0.0008258084999397397
+  },
+  "f002_w003_fabric_folding": {
+    "take_garment_from_stack": 0.7752094268798828,
+    "fold_garment_sides": 0.21526788175106049,
+    "pick_up_hanger": 0.009167212061583996,
+    "__other__": 0.00035545139689929783
+  },
+  "f002_w005_garment_ironing": {
+    "place_folding_board": 0.05964455008506775,
+    "fold_shirt_around_board": 0.9329977631568909,
+    "turn_and_neaten_folded_shirt": 0.007123525254428387,
+    "stack_folded_shirt": 0.0001225670421263203,
+    "__other__": 0.00011159855057485402
+  },
+  "f003_w005_metal_casting": {
+    "carry_casting_bundle": 0.9123055934906006,
+    "put_casting_into_crate": 0.03885066136717796,
+    "pick_up_hammer": 0.02079525962471962,
+    "hammer_casting": 0.02015545591711998,
+    "__other__": 0.007892989553511143
+  },
+  "f003_w007_wax_pattern": {
+    "clean_wax_cluster_with_rod": 0.9686466455459595,
+    "mark_wax_cluster_with_white_tool": 0.0015994341811165214,
+    "place_wax_cluster_on_rack": 0.029250595718622208,
+    "__other__": 0.0005032842746004462
+  },
+  "f003_w009_injection_molding": {
+    "remove_yellow_parts_from_mold": 0.9993207454681396,
+    "hold_metal_rod_at_mold": 0.0006263009272515774,
+    "__other__": 5.304184014676139e-05
+  },
+  "f003_w010_mold_preparation": {
+    "place_yellow_mold_plate_on_container": 0.999595582485199,
+    "__other__": 0.00040448151412419975
+  },
+  "f004_w002_thread_trimming": {
+    "trim_threads_with_snips": 0.9995529055595398,
+    "spread_white_garment_on_table": 0.0004044642555527389,
+    "__other__": 4.263021764927544e-05
+  },
+  "f004_w004_continuous_fabric": {
+    "move_black_garment_to_upper_left": 0.2613977789878845,
+    "spread_garment_in_front_of_sewing_machine": 0.4587674140930176,
+    "align_garment_edge_layers": 0.19124270975589752,
+    "feed_garment_edge_under_presser_foot": 0.08486343920230865,
+    "__other__": 0.003728639567270875
+  },
+  "f004_w005_heat_press": {
+    "raise_heat_press_handle": 0.1565534919500351,
+    "remove_white_fabric_from_heat_press": 0.1615230292081833,
+    "separate_white_fabric_from_stack": 0.6800373196601868,
+    "align_and_fold_white_fabric_on_table": 0.0008475951035507023,
+    "__other__": 0.0010384951019659638
+  },
+  "f004_w005_overlock_seaming": {
+    "guide_pink_fabric_under_presser_foot": 0.8928521871566772,
+    "remove_pink_fabric_from_sewing_machine": 0.09121059626340866,
+    "spread_and_align_pink_fabric_edges": 0.015850024297833443,
+    "__other__": 8.716486627236009e-05
+  },
+  "f004_w006_curvilinear_seam": {
+    "align_curved_gray_fabric_edges": 0.00011590342910494655,
+    "position_gray_fabric_at_presser_foot": 0.00013550482981372625,
+    "guide_gray_fabric_under_presser_foot": 0.9997467398643494,
+    "__other__": 1.7599005559532088e-06
+  },
+  "f004_w006_edge_binding": {
+    "guide_gray_garment_bound_edge_under_presser_foot": 0.04731094464659691,
+    "trim_excess_navy_binding_with_scissors": 0.9502657651901245,
+    "align_navy_bound_edge": 0.002355473581701517,
+    "__other__": 6.787189340684563e-05
+  },
+  "f005_w001_semi_automatic": {
+    "place_ring_part_on_machine_spindle": 0.5194101333618164,
+    "arrange_white_cord_by_hand": 0.1511569619178772,
+    "press_illuminated_control_switch": 0.14881350100040436,
+    "reach_and_return_with_black_tweezers": 0.031193004921078682,
+    "position_black_tweezers_at_white_cord": 0.022119153290987015,
+    "tuck_white_cord_with_black_tweezers": 0.013207949697971344,
+    "__other__": 0.11409927159547806
+  },
+  "f005_w010_manual_lathe": {
+    "turn_center_hex_with_box_wrench": 0.9357612133026123,
+    "place_box_wrench_on_carriage": 0.03862347826361656,
+    "press_left_lathe_control": 0.011065810918807983,
+    "operate_front_carriage_handle": 0.010725353844463825,
+    "__other__": 0.0038242421578615904
+  },
+  "f005_w011_cnc_machine": {
+    "carry_square_fixture_to_cnc_opening": 0.3658885955810547,
+    "position_square_fixture_inside_cnc": 0.15736673772335052,
+    "press_illuminated_orange_control": 0.1081564649939537,
+    "press_lower_right_silver_control": 0.006701483856886625,
+    "close_cnc_sliding_door": 0.0023524418938905,
+    "move_orange_square_fixture_on_table": 0.3546313941478729,
+    "__other__": 0.004902909975498915
+  },
+  "f006_w004_bulk_material": {
+    "move_ribbed_cylinder_to_orange_cart": 0.9171160459518433,
+    "move_ribbed_cylinder_to_metal_table": 0.0001752983225742355,
+    "lift_ribbed_cylinder_from_bulk_container": 0.08268051594495773,
+    "__other__": 2.8173006285214797e-05
+  },
+  "f006_w005_compression_molding": {
+    "carry_and_align_silver_mold_on_press_table": 0.5762950778007507,
+    "operate_blue_lower_control_lever": 0.421626478433609,
+    "__other__": 0.0020784446969628334
+  }
+}
