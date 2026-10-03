@@ -1,0 +1,13 @@
+{
+  "mean_tiou": 0.296892,
+  "tiou_at_0_5": {
+    "tp": 23,
+    "fp": 183,
+    "fn": 58,
+    "precision": 0.11165,
+    "recall": 0.283951,
+    "f1": 0.160279
+  },
+  "gt_occurrences": 81,
+  "predicted_occurrences": 206
+}
