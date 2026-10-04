@@ -7,6 +7,9 @@
 - GitHub操作が必要な場合、コンテナ内の `git clone` や外向き通信結果でGitHub可否を判断しない。必ずGitHub connector自体を確認する。
 - 有料サービスを使用しない。Hugging Face Jobs、有料GPU/CPUジョブ、GitHub larger runnerなどを起動しない。
 - GitHub Actionsは、このpublic repositoryの標準GitHub-hosted `ubuntu-latest` runnerのみを使用する。
+- Colab CLIの `~/.config/colab-cli/colab.log` はOAuth情報を含む可能性があるため、生ログを読み取り・転記・ツール結果へ出力しない。状態確認はサニタイズ済み出力とheartbeatを使う。
+- Colab CLIを新規導入・更新した後は `scripts/harden-colab-cli-logging.py` を適用し、root loggerをINFO、urllib3をWARNING以上に保つ。
+- 長時間ベンチは `benchmarks/factory-ego-jev-t4/results/heartbeat.json`（gitignore）へ現在状態だけを上書きし、GitHub Issueにはフェーズ単位のチェックポイントだけを残す。
 - GGUF、llama.cpp archive、AGMSG runtimeなどの大容量/生成物はGitへコミットしない。Actions artifact経由で一時搬送する。
 - モデル搬入作業では `main` を都度書き換えない。`main` から `bridge/...` 一時ブランチを作り、draft PRでbridge workflowを起動し、PRはmergeしない。
 - artifactをコンテナへ取得したら、次のpart生成前にGitHub側の前artifactを削除する。workflowにもcleanupを実装している。
