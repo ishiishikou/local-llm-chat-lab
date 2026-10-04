@@ -82,6 +82,12 @@ def run_mode(engine, queries, data_root, outdir, mode, fps, threshold, heartbeat
     unit_items=list(queries.items())
     if limit_units:
         unit_items=unit_items[:limit_units]
+    if heartbeat is not None:
+        expected_total=0
+        for unit_id,_ in unit_items:
+            n=len(list((data_root/"units"/unit_id/"frames").glob("f*.jpg")))
+            expected_total+=min(n,limit_frames) if limit_frames else n
+        heartbeat.update(status="running",phase=f"inference:{mode}",progress_current=0,progress_total=expected_total)
     for unit_id,unit_queries in unit_items:
         frame_paths=sorted((data_root/"units"/unit_id/"frames").glob("f*.jpg"))
         if limit_frames:
