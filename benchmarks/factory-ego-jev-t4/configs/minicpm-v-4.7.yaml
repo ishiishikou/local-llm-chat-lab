@@ -1,0 +1,6 @@
+model_id: openbmb/MiniCPM-V-4_7
+mode: pending-runtime-validation
+fps: 2.0
+visual_token_modes: [16x, 4x]
+batch_sizes: [1, 2, 4, 8]
+threshold: 0.50
